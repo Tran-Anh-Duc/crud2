@@ -1,9 +1,12 @@
 <?php
-include_once "DB.php";
 include_once "models/ProductModel.php";
-$productModel = new ProductModel();
-$products = $productModel->getAll();
-?>
+include_once "models/categoryModel.php";
+include_once "controller/ProductController.php";
+include_once "controller/categoryController.php";
+$productController = new ProductController();
+$categoryController = new CategoryController();
+$page = (isset($_GET["page"]) ? $_GET['page'] : "");
+?><s></s>
 
 <!doctype html>
 <html lang="en">
@@ -15,31 +18,19 @@ $products = $productModel->getAll();
     <title>Danh sach san pham </title>
 </head>
 <body>
-<a href="product/add-product.php">
-    <button>ADD </button></a>
-<table border="1px">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Desc</th>
-        <th>Detail</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($products as $product): ?>
-        <tr>
-            <td><?= $product['id'] ?></td>
-            <td><?= $product['name'] ?></td>
-            <td><?= $product['price'] ?></td>
-            <td><?= $product['description'] ?></td>
-            <td><a href="product/Product-detail.php?id=<?php echo $product['id']?>">Detail</a></td>
-            <td><a onclick="return confirm('are you sure')" href="product/product-delete.php?id=<?php echo $product['id']?>">Delete</a></td>
-            <td><a href="product/product-edit.php?id=<?php echo $product['id']?>">Edit</a></td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<div class="navbar">
+    <a href="index.php?page=product-list">product</a>
+    <a href="index.php?page=category-list">category</a>
+</div>
+<?php
+switch ($page) {
+    case "product-list":
+        $productController->index();
+        break;
+    case "category-list":
+        $categoryController->index();
+        break;
+}
+?>
 </body>
 </html>

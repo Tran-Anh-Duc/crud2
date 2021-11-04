@@ -1,40 +1,10 @@
 <?php
-
-class ProductModel
+include_once "database/DB.php";
+include_once "baseModel.php";
+class ProductModel extends  baseModel
 {
 
-    private string $table;
-    protected PDO $dbConnect;
-
-    public function __construct()
-    {
-        $this->table = "products";
-        $db = new DB();
-        $this->dbConnect = $db->connect();
-    }
-
-    public function getAll()
-    {
-        $sql = "select * from $this->table";
-        $stmt = $this->dbConnect->query($sql);
-        return $stmt->fetchAll();
-    }
-
-    public function getById($id)
-    {
-        $sql = "select * from $this->table where id = $id";
-        $stmt = $this->dbConnect->query($sql);
-        return $stmt->fetch();
-    }
-
-    public function delete($id)
-    {
-        $sql = "DELETE FROM $this->table WHERE id = :id";
-        $stmt = $this->dbConnect->prepare($sql);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-    }
-
+    protected string $table = "products";
     public function edit($data)
     {
         $sql = "UPDATE $this->table SET `name`  = ?,`price`=?,`description`= ? WHERE `id` = ?";
@@ -44,10 +14,7 @@ class ProductModel
         $stmt->bindParam(3, $data['description']);
         $stmt->bindParam(4,$data['id']);
         $stmt->execute();
-
     }
-
-
     public function create($data)
     {
         $sql = "insert into $this->table(`name`,`price`,`description`) values (?,?,?)";
